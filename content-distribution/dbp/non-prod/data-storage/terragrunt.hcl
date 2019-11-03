@@ -3,7 +3,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../../../fcbh-infrastructure-modules//dbp/data-storage"
+  source = "../../../../../fcbh-infrastructure-modules//data-storage"
   # source = "git::https://github.com/bradflood/fcbh-infrastructure-modules.git?ref=master"
 }
 
@@ -13,7 +13,7 @@ include {
 }
 
 dependency "vpc" {
-  config_path = "../vpc"
+  config_path = "vpc"
 }
 #
 # aws_region: region in which organization resources will be created
