@@ -25,18 +25,9 @@ inputs = {
   cors_allowed_origins     = ["*.bwfloodstudyaws.com"]
 }
 
-#main distribution (ESTX6CKWMHOBF)
-# terragrunt import module.cloudfront_s3_cdn.aws_cloudfront_distribution.default ESTX6CKWMHOBF
-# terragrunt import module.cloudfront_s3_cdn.aws_cloudfront_origin_access_identity.default E2X79Y8LNMXOG8
-# terragrunt import module.cloudfront_s3_cdn.aws_s3_bucket.origin[0] dbp-prod
-#terragrunt import module.cloudfront_s3_cdn.module.logs.aws_s3_bucket.default[0] "dbp-log"
 
-####module.cloudfront_s3_cdn.module.dns.aws_route53_record.default[0] 
 
 
 /*
 smooth streaming: true for video. Need to configure ordered_cache_behavior, which is not configurable with cloud_posse currently
-
-target origin id: S3-dbp-prod
-logging_config.bucket: dbp-log.s3.amazonaws.com
 */
