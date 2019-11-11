@@ -12,8 +12,6 @@ remote_state {
   }
 }
 
-# Configure root level variables that all resources can inherit. This is especially helpful with multi-account configs
-# where terraform_remote_state data sources are placed directly into the modules.
 inputs = {
   aws_region  = "us-east-2"
   aws_profile = "contrib-kh-admin"
