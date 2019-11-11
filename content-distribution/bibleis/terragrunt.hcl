@@ -1,4 +1,4 @@
-# bibleis dev
+# content-distribution / bibleis dev
 
 remote_state {
   backend = "s3"
