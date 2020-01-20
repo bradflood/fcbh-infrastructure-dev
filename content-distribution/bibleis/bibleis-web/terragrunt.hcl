@@ -12,22 +12,54 @@ include {
   path = find_in_parent_folders()
 }
 
+dependency "load_balancer_certificate" {
+  config_path = "../certificates/elmo.bwfloodstudyaws.com"
+}
+
 inputs = {
 
   # administrative, to match cloudposse label
   namespace = "bibleis"
   name      = "web"
   stage     = "dev"
+  force_destroy = true # force destroy s3 bucket for eb logs. use this for dev only
+  loadbalancer_certificate_arn = dependency.load_balancer_certificate.outputs.arn
 
   # module-specific, sorted alphabetically
 
   // https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
   additional_settings = [
     {
-      namespace = "aws:elasticbeanstalk:environment:process:default"
-      name      = "StickinessEnabled"
-      value     = "false"
+      name      = "XRayEnabled"
+      namespace = "aws:elasticbeanstalk:xray"
+      value     = "true"
     },
+
+
+    # specific to the Beanstalk platform (Node.js)
+    {
+      name      = "NodeVersion"
+      namespace = "aws:elasticbeanstalk:container:nodejs"
+      value     = "10.15.1"
+    },    
+    # {
+    #   name      = "NodeCommand"
+    #   namespace = "aws:elasticbeanstalk:container:nodejs"
+    #   value     = "./node_modules/.bin/cross-env NODE_ENV=production node nextServer"
+    # },
+
+
+    {
+      namespace = "aws:cloudformation:template:parameter"
+      name      = "EnvironmentVariables"
+      value     = "npm_config_unsafe_perm=1,NODE_ENV=production,BASE_API_ROUTE=https://api.v4.dbt.io"
+    },
+
+    {
+      name      = "AppSource"
+      namespace = "aws:cloudformation:template:parameter"
+      value     = "http://s3-us-west-2.amazonaws.com/elasticbeanstalk-samples-us-west-2/nodejs-sample-v2.zip"
+    }
 
 
     # is a keypair needed if we enable SSM Session Manager? or is there another reason the keypair is needed
@@ -37,58 +69,20 @@ inputs = {
     #   value     = "reader-web-stage"
     # },
 
-    # these environment variables are also set below. can this be removed?
-    {
-      namespace = "aws:cloudformation:template:parameter"
-      name      = "EnvironmentVariables"
-      value     = "npm_config_unsafe_perm=1,NODE_ENV=production,BASE_API_ROUTE=https://api.v4.dbt.io"
-    },
-    # {
-    #   name      = "NodeCommand"
-    #   namespace = "aws:elasticbeanstalk:container:nodejs"
-    #   value     = "./node_modules/.bin/cross-env NODE_ENV=production node nextServer"
-    # },
-    {
-      name      = "NodeVersion"
-      namespace = "aws:elasticbeanstalk:container:nodejs"
-      value     = "10.15.1"
-    },
-    # TODO: need to add
-    # {
-    #   name      = "SSLCertificateArns"
-    #   namespace = "aws:elbv2:listener:443"
-    #   value     = "arn:aws:acm:us-west-2:509573027517:certificate/9c653674-b1de-4a7d-9483-87e1fd6962e0"
-    # },
-    {
-      name      = "AppSource"
-      namespace = "aws:cloudformation:template:parameter"
-      value     = "http://s3-us-west-2.amazonaws.com/elasticbeanstalk-samples-us-west-2/nodejs-sample-v2.zip"
-    },
-    {
-      name      = "Automatically Terminate Unhealthy Instances"
-      namespace = "aws:elasticbeanstalk:monitoring"
-      value     = "true"
-    },
-    {
-      name      = "XRayEnabled"
-      namespace = "aws:elasticbeanstalk:xray"
-      value     = "true"
-    }
-
   ]
 
   application_description = "bibleis Web Elastic Beanstalk Application"
   availability_zones      = ["us-east-2a", "us-east-2b"]
-  dns_zone_id             = "" # "Z2ROOWAVSOOVLL"
+  dns_zone_id             = "Z2ROOWAVSOOVLL"
   enable_stream_logs      = true
-  env_vars = {
     # TODO: is this duplicating aws:cloudformation:template:parameter (lines 82-84)?
-    "BASE_API_ROUTE"         = "https://api.v4.dbt.io"
-    "NODE_ENV"               = "dev"
-    "npm_config_unsafe_perm" = "1"
-  }
+  # env_vars = {
+  #   "BASE_API_ROUTE"         = "https://api.v4.dbt.io"
+  #   "NODE_ENV"               = "dev"
+  #   "npm_config_unsafe_perm" = "1"
+  # }
   environment_description = "bibleis Web Blue"
-  #healthcheck_url = "/bible/ENGESV/MAT/1"  # uncomment when app is deployed
+  #healthcheck_url = "/bible/ENGESV/MAT/1"  # uncomment when app is deployed. default is /, which is find for sample app
   instance_type           = "t3.small"
   loadbalancer_type       = "application"
   logs_retention_in_days  = 60

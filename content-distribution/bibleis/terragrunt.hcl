@@ -3,7 +3,7 @@
 remote_state {
   backend = "s3"
   config = {
-    bucket = "bibleis-terraform-state--dev"
+    bucket = "bibleis-terraform-state--970273885721"
 
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "us-east-2"
@@ -14,5 +14,5 @@ remote_state {
 
 inputs = {
   aws_region  = "us-east-2"
-  aws_profile = "contrib-kh-admin"
+  aws_profile = "bwflood"
 }
