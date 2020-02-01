@@ -3,7 +3,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../../fcbh-infrastructure-modules//bastion"
+  source = "../../../../../../fcbh-infrastructure-modules//bastion"
   #source = "git::https://github.com/bradflood/fcbh-infrastructure-modules.git?ref=master"
 }
 
@@ -28,3 +28,5 @@ inputs = {
 }
 
 # BWF: 136.37.119.153
+
+#ssh -i ~/.ssh/fcbh-eb.pem ec2-user@3.133.156.246
