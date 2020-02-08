@@ -2,7 +2,7 @@
 remote_state {
   backend = "s3"
   config = {
-    bucket = "terraform-state-fcbh-dbp-prod${get_env("TG_BUCKET_PREFIX", "")}"
+    bucket = "terraform-state-fcbh-dbp-dev-account-1"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "us-east-2"
     encrypt        = true
