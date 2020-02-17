@@ -8,3 +8,4 @@
 
 # .tfvars files
 *.tfvars
+content-distribution/dev-account-1/us-east-2/prod/elastic-beanstalk/reference-production.cfg.yml

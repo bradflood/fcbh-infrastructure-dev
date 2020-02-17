@@ -1,4 +1,4 @@
 # These variables apply to this account. They are automatically pulled in using yamldecode and merged into
 # the inputs of the root terragrunt.hcl file.
-account_id : "627672411722"
+#account_id : "627672411722" # not currently processed correctly
 aws_profile: "contrib-kh-admin"
