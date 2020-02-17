@@ -29,13 +29,13 @@ dependency "bastion" {
 inputs = {
   namespace           = "dbp"
   stage               = ""
-  name                = "api"
+  name                = "rds"
   vpc_id              = dependency.vpc.outputs.vpc_id
   subnets             = dependency.vpc.outputs.private_subnet_ids
-  security_groups     = [dependency.vpc.outputs.vpc_default_security_group_id, dependency.bastion.outputs.security_group_id]
-  db_name             = "henry"
-  snapshot_identifier = "mysnapshot"
-  #snapshot_identifier = arn:aws:rds:us-east-2:627672411722:cluster-snapshot:mysnapshot
+  security_groups     = [dependency.vpc.outputs.vpc_default_security_group_id,dependency.bastion.outputs.security_group_id]
+  instance_type       = "db.t3.small"  
+  db_name             = "dbp_dev"
+  snapshot_identifier = "pre-terraform-snapshot"  
 }
 
 
