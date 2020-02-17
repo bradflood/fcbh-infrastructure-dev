@@ -21,12 +21,13 @@ inputs = {
   stage     = ""
   name      = "api"
 
-  vpc_id    = dependency.vpc.outputs.vpc_id
+  vpc_id       = dependency.vpc.outputs.vpc_id
   control_cidr = ["140.82.163.2/32", "73.26.9.216/32", "45.58.38.254/32", "136.37.119.153/32"]
-  key_name = "fcbh-eb"
-  subnet_id   = dependency.vpc.outputs.bastion_subnet_id
+  key_name     = "contrib-kh-admin"
+  subnet_id    = dependency.vpc.outputs.bastion_subnet_id
 }
 
 # BWF: 136.37.119.153
 
+# ssh
 #ssh -i ~/.ssh/fcbh-eb.pem ec2-user@3.133.156.246
