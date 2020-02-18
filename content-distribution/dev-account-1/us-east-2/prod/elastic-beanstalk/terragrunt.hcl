@@ -15,6 +15,9 @@ include {
 dependency "vpc" {
   config_path = "../vpc"
 }
+dependency "bastion" {
+  config_path = "../bastion"
+}
 dependency "rds" {
   config_path = "../rds"
 }
@@ -26,14 +29,16 @@ dependency "rds" {
 #
 # to copy an RDS snapshot between accounts: https://aws.amazon.com/premiumsupport/knowledge-center/rds-snapshots-share-account/
 inputs = {
-  namespace               = "dbp"
-  stage                   = ""
-  name                    = "beanstalk"
-  application_description = "dbp"
-  vpc_id                  = dependency.vpc.outputs.vpc_id
-  public_subnets          = dependency.vpc.outputs.public_subnet_ids
-  private_subnets         = dependency.vpc.outputs.private_subnet_ids
-  keypair                 = "contrib-kh-admin"
+  namespace                  = "dbp"
+  stage                      = ""
+  name                       = "beanstalk"
+  application_description    = "dbp"
+  vpc_id                     = dependency.vpc.outputs.vpc_id
+  public_subnets             = dependency.vpc.outputs.public_subnet_ids
+  private_subnets            = dependency.vpc.outputs.private_subnet_ids
+  allowed_security_groups    = [dependency.vpc.outputs.vpc_default_security_group_id]
+  additional_security_groups = [dependency.bastion.outputs.security_group_id]
+  keypair                    = "contrib-kh-admin"
   #domain_name               = "bwfloodlearnaws.com"
   #subject_alternative_names = ["beanstalk-dev.bwfloodlearnaws.com"]
 
@@ -73,39 +78,19 @@ inputs = {
   // https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
   # a whole ton of settings will be translated from saved_config and added here
   additional_settings = [
-    {
-      namespace = "namespace"
-      name      = "name"
-      value     = "value"
-    },
-
-    {
-      namespace = "aws:elasticbeanstalk:container:php:phpini"
-      name      = "document_root"
-      value     = "/public"
-    },
     # {
     #   namespace = "namespace"
     #   name      = "name"
     #   value     = "value"
     # },
-    {
-      namespace = "aws:elasticbeanstalk:environment:process:default"
-      name      = "StickinessEnabled"
-      value     = "false"
-    }
 
+    {
+      namespace = "aws:elasticbeanstalk:container:php:phpini"
+      name      = "document_root"
+      value     = "/public"
+    }
   ]
-  #APP_ENV: production
-  #APP_URL: https://v4.dbt.io
-  #API_URL: https://api.v4.dbt.io
-  #APP_URL_PODCAST: https://v4.dbt.io
-  #APP_DEBUG: 0
-  #DBP_HOST: dbp.cluster-ro-cyxul5641iji.us-west-2.rds.amazonaws.com (reader endpoint)
-  #DBP_USERNAME: api_node_dbp
-  #DBP_USERS_HOST: dbp.cluster-cyxul5641iji.us-west-2.rds.amazonaws.com (writer endpoint)
-  #DBP_USERS_DATABASE: dbp_users  
-  #DBP_USERS_USERNAME: api_node_dbp
+
   env_vars = {
     "APP_ENV"            = "dev"
     "APP_URL"            = "https://v4.dbt.io"
