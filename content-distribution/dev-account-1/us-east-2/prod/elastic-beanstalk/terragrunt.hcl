@@ -4,7 +4,7 @@
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
   source = "../../../../../../fcbh-infrastructure-modules//elastic-beanstalk"
-  # source = "git::https://github.com/bradflood/fcbh-infrastructure-modules.git?ref=master"
+  # source = "git::https://github.com/faithcomesbyhearing/fcbh-infrastructure-modules.git?ref=master"
 }
 
 #Include all settings from the root terragrunt.hcl file
@@ -74,22 +74,6 @@ inputs = {
   application_port = 80
 
   solution_stack_name = "64bit Amazon Linux 2018.03 v2.9.2 running PHP 7.2 "
-
-  // https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options-general.html
-  # a whole ton of settings will be translated from saved_config and added here
-  additional_settings = [
-    # {
-    #   namespace = "namespace"
-    #   name      = "name"
-    #   value     = "value"
-    # },
-
-    {
-      namespace = "aws:elasticbeanstalk:container:php:phpini"
-      name      = "document_root"
-      value     = "/public"
-    }
-  ]
 
   env_vars = {
     "APP_ENV"            = "dev"
