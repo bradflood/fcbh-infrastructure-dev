@@ -39,6 +39,8 @@ inputs = {
   allowed_security_groups    = [dependency.vpc.outputs.vpc_default_security_group_id]
   additional_security_groups = [dependency.bastion.outputs.security_group_id]
   keypair                    = "contrib-kh-admin"
+  elasticache_subnet_group_name = "dbp-elasticache-subnet"  
+  availability_zones            = dependency.vpc.outputs.availability_zones  
   #domain_name               = "bwfloodlearnaws.com"
   #subject_alternative_names = ["beanstalk-dev.bwfloodlearnaws.com"]
 
