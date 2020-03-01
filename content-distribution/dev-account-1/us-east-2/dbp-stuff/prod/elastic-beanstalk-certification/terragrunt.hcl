@@ -3,7 +3,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../../../../fcbh-infrastructure-modules//elastic-beanstalk"
+  source = "../../../../../../../fcbh-infrastructure-modules//elastic-beanstalk"
   # source = "git::https://github.com/faithcomesbyhearing/fcbh-infrastructure-modules.git?ref=master"
 }
 
@@ -30,7 +30,7 @@ dependency "rds" {
 # to copy an RDS snapshot between accounts: https://aws.amazon.com/premiumsupport/knowledge-center/rds-snapshots-share-account/
 inputs = {
   namespace                  = "dbp"
-  stage                      = ""
+  stage                      = "cert"
   name                       = "beanstalk"
   application_description    = "dbp"
   vpc_id                     = dependency.vpc.outputs.vpc_id
@@ -41,15 +41,12 @@ inputs = {
   keypair                    = "contrib-kh-admin"
   elasticache_subnet_group_name = "dbp-elasticache-subnet"  
   availability_zones            = dependency.vpc.outputs.availability_zones  
-  #domain_name               = "bwfloodlearnaws.com"
-  #subject_alternative_names = ["beanstalk-dev.bwfloodlearnaws.com"]
-
 
   description                = "DBP Elastic Beanstalk (Non Prod - Single instance)"
   availability_zone_selector = "Any 2"
   dns_zone_id                = "" # "Z2ROOWAVSOOVLL"
   instance_type              = "t3.small"
-  #wait_for_ready_timeout     = "20m"
+
 
   environment_description = "my test environment for dbp - created by terraform"
   version_label           = ""
@@ -78,7 +75,7 @@ inputs = {
   solution_stack_name = "64bit Amazon Linux 2018.03 v2.9.2 running PHP 7.2 "
 
   env_vars = {
-    "APP_ENV"            = "dev"
+    "APP_ENV"            = "cert"
     "APP_URL"            = "https://v4.dbt.io"
     "API_URL"            = "https://api.v4.dbt.io"
     "APP_URL_PODCAST"    = "https://v4.dbt.io"

@@ -3,7 +3,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "../../../../../../fcbh-infrastructure-modules//bastion"
+  source = "../../../../../../../fcbh-infrastructure-modules//bastion"
   #source = "git::https://github.com/faithcomesbyhearing/fcbh-infrastructure-modules.git?ref=master"
 }
 
@@ -27,7 +27,3 @@ inputs = {
   subnet_id    = dependency.vpc.outputs.bastion_subnet_id
 }
 
-# BWF: 136.37.119.153
-
-# ssh
-#ssh -i ~/.ssh/fcbh-eb.pem ec2-user@3.133.156.246
