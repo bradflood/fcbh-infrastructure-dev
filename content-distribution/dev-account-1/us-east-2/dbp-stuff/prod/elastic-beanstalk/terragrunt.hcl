@@ -21,6 +21,9 @@ dependency "bastion" {
 dependency "rds" {
   config_path = "../rds"
 }
+dependency "loadbalancer_certificate" {
+  config_path = "../certificates/v2.bwfloodstudyaws.com"
+}
 #
 # aws_region: region in which organization resources will be created
 # 
@@ -29,26 +32,25 @@ dependency "rds" {
 #
 # to copy an RDS snapshot between accounts: https://aws.amazon.com/premiumsupport/knowledge-center/rds-snapshots-share-account/
 inputs = {
-  namespace                  = "dbp"
-  stage                      = ""
-  name                       = "beanstalk"
-  application_description    = "dbp"
-  vpc_id                     = dependency.vpc.outputs.vpc_id
-  public_subnets             = dependency.vpc.outputs.public_subnet_ids
-  private_subnets            = dependency.vpc.outputs.private_subnet_ids
-  allowed_security_groups    = [dependency.vpc.outputs.vpc_default_security_group_id]
-  additional_security_groups = [dependency.bastion.outputs.security_group_id]
-  keypair                    = "contrib-kh-admin"
-  elasticache_subnet_group_name = "dbp-elasticache-subnet"  
-  availability_zones            = dependency.vpc.outputs.availability_zones  
-  #domain_name               = "bwfloodlearnaws.com"
-  #subject_alternative_names = ["beanstalk-dev.bwfloodlearnaws.com"]
+  namespace                     = "dbp"
+  stage                         = ""
+  name                          = "beanstalk"
+  application_description       = "dbp"
+  vpc_id                        = dependency.vpc.outputs.vpc_id
+  public_subnets                = dependency.vpc.outputs.public_subnet_ids
+  private_subnets               = dependency.vpc.outputs.private_subnet_ids
+  allowed_security_groups       = [dependency.vpc.outputs.vpc_default_security_group_id]
+  additional_security_groups    = [dependency.bastion.outputs.security_group_id]
+  keypair                       = "contrib-kh-admin"
+  elasticache_subnet_group_name = "dbp-elasticache-subnet"
+  availability_zones            = dependency.vpc.outputs.availability_zones
+  description                   = "DBP Elastic Beanstalk (Non Prod - Single instance)"
+  availability_zone_selector    = "Any 2"
+  dns_zone_id                   = "Z2ROOWAVSOOVLL" 
+  dns_subdomain                 = "v4.bwfloodstudyaws.com"
+  # loadbalancer_certificate_arn = dependency.loadbalancer_certificate.outputs.arn
 
-
-  description                = "DBP Elastic Beanstalk (Non Prod - Single instance)"
-  availability_zone_selector = "Any 2"
-  dns_zone_id                = "" # "Z2ROOWAVSOOVLL"
-  instance_type              = "t3.small"
+  instance_type = "t3.small"
   #wait_for_ready_timeout     = "20m"
 
   environment_description = "my test environment for dbp - created by terraform"
