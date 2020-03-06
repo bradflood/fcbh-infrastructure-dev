@@ -14,9 +14,9 @@ include {
   path = find_in_parent_folders()
 }
 
-# dependency "load_balancer_certificate" {
-#   config_path = "../certificates/elmo.bwfloodstudyaws.com"
-# }
+dependency "vpc" {
+  config_path = "../vpc"
+}
 
 
 
@@ -31,12 +31,12 @@ inputs = {
   # availability_zones = data.aws_availability_zones.all.names # used?
   dns_zone_id        = "Z2ROOWAVSOOVLL"
   enable_stream_logs = true
-  vpc_id             = data.aws_vpc.selected.id
 
 
-  # vpc_id                     = dependency.vpc.outputs.vpc_id
-  # public_subnets             = dependency.vpc.outputs.public_subnet_ids
-  # private_subnets            = dependency.vpc.outputs.private_subnet_ids
+
+  vpc_id                     = dependency.vpc.outputs.vpc_id
+  public_subnets             = dependency.vpc.outputs.public_subnet_ids
+  private_subnets            = dependency.vpc.outputs.private_subnet_ids
   # allowed_security_groups    = [dependency.bastion.outputs.security_group_id, dependency.vpc.outputs.vpc_default_security_group_id]
   # additional_security_groups = [dependency.bastion.outputs.security_group_id]
   # keypair                    = "bibleis"
