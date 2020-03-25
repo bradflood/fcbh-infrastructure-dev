@@ -5,8 +5,6 @@
 terraform {
   source = "../../../../../../../fcbh-infrastructure-modules//elastic-beanstalk"
   #source = "git::https://github.com/faithcomesbyhearing/fcbh-infrastructure-modules.git?ref=master"
-
-
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -17,7 +15,9 @@ include {
 dependency "vpc" {
   config_path = "../vpc"
 }
-
+dependency "loadbalancer_certificate" {
+  config_path = "../certificates/v2.bwfloodstudyaws.com"
+}
 
 
 inputs = {
@@ -28,11 +28,8 @@ inputs = {
   force_destroy           = true # force destroy s3 bucket for eb logs. use this for dev only  
   application_description = "Bible.is Web"
 
-  # availability_zones = data.aws_availability_zones.all.names # used?
-  dns_zone_id        = "Z2ROOWAVSOOVLL"
+  # dns_zone_id        = "Z2ROOWAVSOOVLL" # don't assume a subdomain
   enable_stream_logs = true
-
-
 
   vpc_id                     = dependency.vpc.outputs.vpc_id
   public_subnets             = dependency.vpc.outputs.public_subnet_ids
@@ -40,11 +37,8 @@ inputs = {
   # allowed_security_groups    = [dependency.bastion.outputs.security_group_id, dependency.vpc.outputs.vpc_default_security_group_id]
   # additional_security_groups = [dependency.bastion.outputs.security_group_id]
   # keypair                    = "bibleis"
-  #availability_zones         = dependency.vpc.outputs.availability_zones # don't think this is used
 
   description = "Bible.is Web"
-  #availability_zone_selector = "Any 2" # used??
-  dns_zone_id   = "" # "Z2ROOWAVSOOVLL"
   instance_type = "t3.small"
 
   environment_description = "Bible.is Web Prod"
@@ -79,7 +73,7 @@ inputs = {
 
   env_vars = {
     "npm_config_unsafe_perm" = "1"
-    "NODE_ENV"               = "production"
+    "NODE_ENV"               = "dev"
     "BASE_API_ROUTE"         = "https://api.v4.dbt.io"
 
 
