@@ -46,9 +46,9 @@ inputs = {
   availability_zones            = dependency.vpc.outputs.availability_zones
   description                   = "DBP Elastic Beanstalk (Non Prod - Single instance)"
   availability_zone_selector    = "Any 2"
-  dns_zone_id                   = "Z2ROOWAVSOOVLL" 
-  dns_subdomain                 = "v4.bwfloodstudyaws.com"
-  # loadbalancer_certificate_arn = dependency.loadbalancer_certificate.outputs.arn
+  # dns_zone_id                   = "Z2ROOWAVSOOVLL"  # don't assume any subdomain
+  # dns_subdomain                 = "v4.bwfloodstudyaws.com" # don't assume a subdomain
+  loadbalancer_certificate_arn = dependency.loadbalancer_certificate.outputs.arn 
 
   instance_type = "t3.small"
   #wait_for_ready_timeout     = "20m"

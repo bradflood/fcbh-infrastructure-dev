@@ -12,13 +12,21 @@ include {
   path = find_in_parent_folders()
 }
 
+dependency "route53" {
+  config_path = "../route53/hosted-zone-dev"
+}
+
 dependency "vpc" {
   config_path = "../vpc"
 }
 
+dependency "certificate" {
+  config_path = "../certificate/beanstalk"
+}
+
 # to copy an RDS snapshot between accounts: https://aws.amazon.com/premiumsupport/knowledge-center/rds-snapshots-share-account/
 inputs = {
-  namespace                     = "dbp"
+  namespace                     = "bwflood"
   stage                         = "dev"
   name                          = "beanstalk"
   application_description       = "wordpress"
@@ -31,7 +39,7 @@ inputs = {
 
   description                = "Wordpress beanstalk"
   availability_zone_selector = "Any 2"
-  dns_zone_id                = "" # "Z2ROOWAVSOOVLL"
+  dns_zone_id                = dependency.route53.outputs.zone_id
   instance_type              = "t3.small"
 
   environment_description = "test"
